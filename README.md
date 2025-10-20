@@ -161,63 +161,9 @@ include(":androidApp", ":shared", ":libraryBase",
 - `subModules`: 子模块列表（用&分隔）
 - `enableMultiModule`: 启用多模块支持
 
-### 7. 开发规范
+### 7. 跨模块接口调用
 
-#### 7.1 模块开发原则
-1. **单一职责**: 每个模块专注于特定的业务领域
-2. **依赖倒置**: 业务模块依赖基础模块，不直接依赖其他业务模块
-3. **接口隔离**: 通过接口定义模块间的通信协议
-4. **开闭原则**: 模块对扩展开放，对修改封闭
-
-#### 7.2 跨平台开发注意事项
-1. **避免平台特定代码**: 在 commonMain 中不使用平台特定的 API
-2. **使用 expect/actual**: 对于平台特定实现，使用 expect/actual 机制
-3. **资源管理**: 将共享资源放在 commonMain/assets 目录
-4. **测试策略**: 为每个平台编写对应的测试用例
-
-### 8. 项目结构
-
-```
-kuiklyMultiModuleDemo/
-├── androidApp/                 # Android 应用
-├── iosApp/                     # iOS 应用
-├── ohosApp/                    # HarmonyOS 应用
-├── shared/                     # 主共享模块
-├── libraryBase/                # 基础库模块
-├── moduleAccount/              # 账户业务模块
-├── moduleMessage/              # 消息业务模块
-├── moduleMine/                 # 个人中心业务模块
-├── buildSrc/                   # 构建脚本
-├── gradle/                     # Gradle 配置
-├── build.gradle.kts            # 根构建文件
-├── build.ohos.gradle.kts       # HarmonyOS 构建文件
-├── settings.gradle.kts         # 项目设置
-└── settings.ohos.gradle.kts    # HarmonyOS 项目设置
-```
-
-### 9. 快速开始
-
-#### 9.1 环境要求
-- JDK 8+
-- Android Studio Arctic Fox+
-- Xcode 13+ (iOS 开发)
-- DevEco Studio (HarmonyOS 开发)
-
-#### 9.2 构建命令
-```bash
-# Android 构建
-./gradlew :androidApp:assembleDebug
-
-# iOS 构建
-cd iosApp && xcodebuild
-
-# HarmonyOS 构建
-./gradlew -c settings.ohos.gradle.kts build
-```
-
-### 8. 跨模块接口调用
-
-#### 8.1 服务接口定义
+#### 7.1 服务接口定义
 项目通过服务接口实现跨模块通信，每个业务模块都定义了对应的服务接口：
 
 ```kotlin
@@ -237,7 +183,7 @@ interface AccountService {
 }
 ```
 
-#### 8.2 服务实现与注册
+#### 7.2 服务实现与注册
 各模块通过 `ModuleServiceManager` 注册服务实现：
 
 ```kotlin
@@ -260,7 +206,7 @@ ModuleServiceManager.registerService(
 )
 ```
 
-#### 8.3 跨模块调用机制
+#### 7.3 跨模块调用机制
 通过扩展函数实现便捷的跨模块服务调用：
 
 ```kotlin
@@ -275,7 +221,7 @@ fun getAccountService(): AccountService? =
     ModuleServiceManager.getService(ServiceConstants.ACCOUNT_SERVICE)
 ```
 
-#### 8.4 实际调用示例
+#### 7.4 实际调用示例
 在业务代码中的跨模块调用：
 
 ```kotlin
@@ -293,7 +239,7 @@ class MineDemoPage : KRPage() {
 }
 ```
 
-#### 8.5 服务管理器实现
+#### 7.5 服务管理器实现
 `ModuleServiceManager` 提供统一的服务注册和获取机制：
 
 ```kotlin
@@ -311,9 +257,9 @@ object ModuleServiceManager {
 }
 ```
 
-### 9. 平台初始化逻辑
+### 8. 平台初始化逻辑
 
-#### 9.1 Android 平台初始化
+#### 8.1 Android 平台初始化
 在 Android 应用中，页面初始化在 `KuiklyRenderActivity` 的 `onCreate` 方法中执行：
 
 ```kotlin
@@ -330,7 +276,7 @@ class KuiklyRenderActivity : ComponentActivity() {
 }
 ```
 
-#### 9.2 iOS 平台初始化
+#### 8.2 iOS 平台初始化
 在 iOS 应用中，页面初始化在 `iOSApp` 的 `init` 方法中执行：
 
 ```swift
@@ -350,7 +296,7 @@ struct iOSApp: App {
 }
 ```
 
-#### 9.3 HarmonyOS 平台初始化
+#### 8.3 HarmonyOS 平台初始化
 在 HarmonyOS 应用中，页面初始化在 `EntryAbility` 的 `onCreate` 方法中执行：
 
 ```typescript
@@ -375,7 +321,7 @@ export default class EntryAbility extends UIAbility {
 }
 ```
 
-#### 9.4 页面初始化器实现
+#### 8.4 页面初始化器实现
 `PageInitializer` 负责统一注册所有模块的页面和服务：
 
 ```kotlin
@@ -390,9 +336,64 @@ object PageInitializer {
 }
 ```
 
-### 10. 扩展指南
+### 9. 开发规范
 
-#### 10.1 添加新业务模块
+#### 9.1 模块开发原则
+1. **单一职责**: 每个模块专注于特定的业务领域
+2. **依赖倒置**: 业务模块依赖基础模块，不直接依赖其他业务模块
+3. **接口隔离**: 通过接口定义模块间的通信协议
+4. **开闭原则**: 模块对扩展开放，对修改封闭
+
+#### 9.2 跨平台开发注意事项
+1. **避免平台特定代码**: 在 commonMain 中不使用平台特定的 API
+3. **资源管理**: 将共享资源放在 commonMain/assets 目录
+4. **测试策略**: 为每个平台编写对应的测试用例
+
+### 10. 项目结构
+
+```
+kuiklyMultiModuleDemo/
+├── androidApp/                 # Android 应用
+├── iosApp/                     # iOS 应用
+├── ohosApp/                    # HarmonyOS 应用
+├── shared/                     # 主共享模块
+├── libraryBase/                # 基础库模块
+├── moduleAccount/              # 账户业务模块
+├── moduleMessage/              # 消息业务模块
+├── moduleMine/                 # 个人中心业务模块
+├── buildSrc/                   # 构建脚本
+├── gradle/                     # Gradle 配置
+├── build.gradle.kts            # 根构建文件
+├── build.ohos.gradle.kts       # HarmonyOS 构建文件
+├── settings.gradle.kts         # 项目设置
+└── settings.ohos.gradle.kts    # HarmonyOS 项目设置
+```
+
+### 11. 快速开始
+
+#### 11.1 环境要求
+- JDK 8+
+- Android Studio Arctic Fox+
+- Xcode 13+ (iOS 开发)
+- DevEco Studio (HarmonyOS 开发)
+
+#### 11.2 构建命令
+```bash
+# Android 构建
+./gradlew :androidApp:assembleDebug
+
+# iOS 构建
+cd iosApp && xcodebuild
+
+# HarmonyOS 构建
+./gradlew -c settings.ohos.gradle.kts build
+```
+
+
+
+### 12. 扩展指南
+
+#### 12.1 添加新业务模块
 1. 创建新模块目录
 2. 配置 build.gradle.kts 和 build.ohos.gradle.kts
 3. 在 settings 文件中注册模块

@@ -215,6 +215,181 @@ cd iosApp && xcodebuild
 ./gradlew -c settings.ohos.gradle.kts build
 ```
 
+### 8. 跨模块接口调用
+
+#### 8.1 服务接口定义
+项目通过服务接口实现跨模块通信，每个业务模块都定义了对应的服务接口：
+
+```kotlin
+// MessageService.kt - 消息模块服务接口
+interface MessageService {
+    fun getModuleName(): String
+}
+
+// MineService.kt - 个人中心模块服务接口  
+interface MineService {
+    fun getModuleName(): String
+}
+
+// AccountService.kt - 账户模块服务接口
+interface AccountService {
+    fun getModuleName(): String
+}
+```
+
+#### 8.2 服务实现与注册
+各模块通过 `ModuleServiceManager` 注册服务实现：
+
+```kotlin
+// MessagePageRegistry.kt - 消息模块注册
+ModuleServiceManager.registerService(
+    ServiceConstants.MESSAGE_SERVICE, 
+    MessageServiceImpl.INSTANCE
+)
+
+// MinePageRegistry.kt - 个人中心模块注册
+ModuleServiceManager.registerService(
+    ServiceConstants.MINE_SERVICE, 
+    MineServiceImpl.INSTANCE
+)
+
+// AccountPageRegistry.kt - 账户模块注册
+ModuleServiceManager.registerService(
+    ServiceConstants.ACCOUNT_SERVICE, 
+    AccountServiceImpl.INSTANCE
+)
+```
+
+#### 8.3 跨模块调用机制
+通过扩展函数实现便捷的跨模块服务调用：
+
+```kotlin
+// ServiceExtensions.kt - 扩展函数定义
+fun getMessageService(): MessageService? = 
+    ModuleServiceManager.getService(ServiceConstants.MESSAGE_SERVICE)
+
+fun getMineService(): MineService? = 
+    ModuleServiceManager.getService(ServiceConstants.MINE_SERVICE)
+
+fun getAccountService(): AccountService? = 
+    ModuleServiceManager.getService(ServiceConstants.ACCOUNT_SERVICE)
+```
+
+#### 8.4 实际调用示例
+在业务代码中的跨模块调用：
+
+```kotlin
+// MineDemoPage.kt - 在个人中心模块调用消息模块服务
+class MineDemoPage : KRPage() {
+    override fun render(): KRNode {
+        // 跨模块调用获取消息模块名称
+        val messageName = getMessageService()?.getModuleName() ?: "Unknown"
+        val mineName = getMineService()?.getModuleName() ?: "Unknown"
+        
+        return KRColumn {
+            // 使用获取到的模块信息
+        }
+    }
+}
+```
+
+#### 8.5 服务管理器实现
+`ModuleServiceManager` 提供统一的服务注册和获取机制：
+
+```kotlin
+object ModuleServiceManager {
+    private val serviceCache = mutableMapOf<String, Any>()
+    private val serviceProviders = mutableMapOf<String, () -> Any>()
+    
+    fun <T> registerService(serviceKey: String, serviceInstance: T) {
+        serviceCache[serviceKey] = serviceInstance as Any
+    }
+    
+    fun <T> getService(serviceKey: String): T? {
+        return serviceCache[serviceKey] as? T
+    }
+}
+```
+
+### 9. 平台初始化逻辑
+
+#### 9.1 Android 平台初始化
+在 Android 应用中，页面初始化在 `KuiklyRenderActivity` 的 `onCreate` 方法中执行：
+
+```kotlin
+// KuiklyRenderActivity.kt
+class KuiklyRenderActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        // 初始化多模块页面服务
+        PageInitializer.initializePages()
+        
+        // 其他初始化逻辑...
+    }
+}
+```
+
+#### 9.2 iOS 平台初始化
+在 iOS 应用中，页面初始化在 `iOSApp` 的 `init` 方法中执行：
+
+```swift
+// iOSApp.swift
+@main
+struct iOSApp: App {
+    init() {
+        // 初始化多模块页面服务
+        PageInitializer.shared.initializePages()
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+```
+
+#### 9.3 HarmonyOS 平台初始化
+在 HarmonyOS 应用中，页面初始化在 `EntryAbility` 的 `onCreate` 方法中执行：
+
+```typescript
+// EntryAbility.ets
+export default class EntryAbility extends UIAbility {
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    
+    try {
+      // 初始化多模块页面服务
+      hilog.info(0x0000, 'testTag', '%{public}s', 'Starting PageInitializer.initializePages()');
+      const result = initializePages();
+      if (result === 0) {
+        hilog.info(0x0000, 'testTag', '%{public}s', 'PageInitializer.initializePages() completed successfully');
+      } else {
+        hilog.error(0x0000, 'testTag', 'PageInitializer.initializePages() failed with code: %{public}d', result);
+      }
+    } catch (error) {
+      hilog.error(0x0000, 'testTag', 'Failed to initialize pages: %{public}s', JSON.stringify(error) ?? '');
+    }
+  }
+}
+```
+
+#### 9.4 页面初始化器实现
+`PageInitializer` 负责统一注册所有模块的页面和服务：
+
+```kotlin
+// PageInitializer.kt
+object PageInitializer {
+    fun initializePages() {
+        // 注册各模块页面
+        MinePageRegistry.registerPages()
+        MessagePageRegistry.registerPages()  
+        AccountPageRegistry.registerPages()
+    }
+}
+```
+
 ### 10. 扩展指南
 
 #### 10.1 添加新业务模块

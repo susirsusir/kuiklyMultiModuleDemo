@@ -1,5 +1,6 @@
 package com.susir.mine.demo
 
+import com.susir.base.ext.srcCommon
 import com.susir.base.ext.srcPage
 import com.susir.base.service.getMessageService
 import com.tencent.kuikly.core.annotations.Page
@@ -35,6 +36,7 @@ class MineDemoPage : Pager() {
                     attr {
                         size(32f, 32f)
                         srcPage("mine_btn_back_ic.png")
+//                        srcCommon("common_mine_btn_back_ic.png")
                     }
                     event {
                         click {
@@ -53,7 +55,7 @@ class MineDemoPage : Pager() {
                 }
                 event {
                     click {
-                        ctx.title = getMessageService()?.getModuleName() ?: "Message"
+                        ctx.title = getMessageService()?.getModuleName() ?: "Mine"
                     }
                 }
             }

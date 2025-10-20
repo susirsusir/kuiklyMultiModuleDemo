@@ -1,5 +1,6 @@
 package com.susir.multimodule
 
+import com.susir.message.MessagePageRegistry
 import com.susir.mine.MinePageRegistry
 
 
@@ -18,6 +19,8 @@ object PageInitializer {
         if (isInitialized) return
         // 注册moduleMine模块的页面
         MinePageRegistry.register()
+        // 注册moduleMessage模块的页面
+        MessagePageRegistry.register()
         
         isInitialized = true
     }

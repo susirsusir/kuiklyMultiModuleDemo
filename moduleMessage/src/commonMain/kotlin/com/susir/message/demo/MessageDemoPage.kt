@@ -1,26 +1,27 @@
-package com.susir.base.page
+package com.susir.message.demo
 
 import com.susir.base.ext.srcCommon
 import com.susir.base.ext.srcPage
 import com.susir.base.service.getMessageService
+import com.susir.base.service.getMineService
+import com.tencent.kuikly.core.annotations.Page
 import com.tencent.kuikly.core.base.ViewBuilder
+import com.tencent.kuikly.core.module.RouterModule
 import com.tencent.kuikly.core.pager.Pager
 import com.tencent.kuikly.core.reactive.handler.observable
 import com.tencent.kuikly.core.views.Image
 import com.tencent.kuikly.core.views.Text
 import com.tencent.kuikly.core.views.View
-import com.tencent.kuikly.core.annotations.Page
-import com.tencent.kuikly.core.module.RouterModule
 
 /**
- *  libraryBase demo page
+ * moduleMessage demo page
  *
  * @author suzhanfeng
- * @date 2025/10/20
+ * @date 2025/7/31
  */
-@Page(name = "BaseDemoPage", moduleId = "libraryBase")
-class BaseDemoPage : Pager() {
-    private var title by observable("Base")
+@Page(name = "MessageDemoPage", moduleId = "moduleMessage")
+class MessageDemoPage : Pager() {
+    private var title by observable("Message")
 
     override fun body(): ViewBuilder {
         val ctx = this
@@ -35,8 +36,8 @@ class BaseDemoPage : Pager() {
                 Image {
                     attr {
                         size(32f, 32f)
-                        srcPage("base_btn_back_ic.png")
-//                        srcCommon("common_base_btn_back_ic.png")
+                        srcPage("message_btn_back_ic.png")
+//                        srcCommon("common_message_btn_back_ic.png")
                     }
                     event {
                         click {
@@ -55,7 +56,7 @@ class BaseDemoPage : Pager() {
                 }
                 event {
                     click {
-                        ctx.title = getMessageService()?.getModuleName() ?: "Message"
+                        ctx.title = getMineService()?.getModuleName() ?: "Mine"
                     }
                 }
             }

@@ -44,6 +44,7 @@ kotlin {
                 implementation("com.tencent.kuikly-open:core-annotations:${Version.getKuiklyVersion()}")
                 implementation(project(":libraryBase"))
                 implementation(project(":moduleMine"))
+                implementation(project(":moduleMessage"))
 
             }
         }
@@ -86,7 +87,7 @@ ksp {
     arg(KEY_PAGE_NAME, getPageName())
     arg("moduleId", "shared")                // 模块Id
     arg("isMainModule", "true")              // 是否是主模块
-    arg("subModules", "moduleMine")       // 子模块，用&间隔
+    arg("subModules", "moduleMine&moduleMessage")       // 子模块，用&间隔
     arg("enableMultiModule","true")          // 启用多模块
 }
 

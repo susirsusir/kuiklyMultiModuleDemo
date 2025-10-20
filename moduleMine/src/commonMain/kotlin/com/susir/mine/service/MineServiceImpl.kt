@@ -23,7 +23,7 @@ import hb.xmhaibao.base.service.interfaces.MineService
     }
 
     override fun getModuleName(): String {
-        return "我的"
+        return "Mine"
     }
 
     companion object {

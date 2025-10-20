@@ -33,3 +33,5 @@ include(":libraryBase")
 project(":libraryBase").buildFileName = buildFileName
 include(":moduleMine")
 project(":moduleMine").buildFileName = buildFileName
+include(":moduleMessage")
+project(":moduleMessage").buildFileName = buildFileName

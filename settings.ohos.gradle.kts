@@ -35,3 +35,5 @@ include(":moduleMine")
 project(":moduleMine").buildFileName = buildFileName
 include(":moduleMessage")
 project(":moduleMessage").buildFileName = buildFileName
+include(":moduleAccount")
+project(":moduleAccount").buildFileName = buildFileName

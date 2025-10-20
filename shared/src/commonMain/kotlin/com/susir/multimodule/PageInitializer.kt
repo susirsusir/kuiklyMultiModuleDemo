@@ -1,5 +1,6 @@
 package com.susir.multimodule
 
+import com.susir.account.AccountPageRegistry
 import com.susir.message.MessagePageRegistry
 import com.susir.mine.MinePageRegistry
 
@@ -21,6 +22,8 @@ object PageInitializer {
         MinePageRegistry.register()
         // 注册moduleMessage模块的页面
         MessagePageRegistry.register()
+        // 注册moduleAccount模块的页面
+        AccountPageRegistry.register()
         
         isInitialized = true
     }

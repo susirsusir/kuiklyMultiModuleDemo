@@ -16,6 +16,7 @@ object ModuleNameProvider {
     private val packageToModuleMap = mapOf(
         "com.susir.mine" to "moduleMine",
         "com.susir.message" to "moduleMessage",
+        "com.susir.account" to "moduleAccount",
         "com.susir.base" to "libraryBase",
         "com.susir.multimodule" to "shared"
     )

@@ -17,4 +17,9 @@ object ServiceConstants {
      * Message模块服务名称
      */
     const val MESSAGE_SERVICE = "MessageService"
+
+     /**
+     * Account模块服务名称
+     */
+    const val ACCOUNT_SERVICE = "AccountService"
 }

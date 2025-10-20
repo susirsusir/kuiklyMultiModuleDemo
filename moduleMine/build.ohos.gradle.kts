@@ -1,6 +1,7 @@
+
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
+    kotlin("plugin.serialization")
     id("com.android.library")
     id("com.google.devtools.ksp")
     id("maven-publish")
@@ -19,24 +20,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            freeCompilerArgs = freeCompilerArgs + getCommonCompilerArgs()
-            isStatic = true
-            license = "MIT"
-        }
-    }
-
     ohosArm64 {
         binaries.sharedLib {
         }
@@ -48,7 +31,6 @@ kotlin {
                 implementation("com.tencent.kuikly-open:core:${Version.getKuiklyOhosVersion()}")
                 implementation("com.tencent.kuikly-open:core-annotations:${Version.getKuiklyOhosVersion()}")
                 implementation(project(":libraryBase"))
-                implementation(project(":moduleMine"))
 
             }
         }
@@ -58,17 +40,6 @@ kotlin {
                 api("com.tencent.kuikly-open:core-render-android:${Version.getKuiklyOhosVersion()}")
             }
         }
-
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
-
     }
 }
 
@@ -89,24 +60,21 @@ publishing {
 
 ksp {
     arg(KEY_PAGE_NAME, getPageName())
-    arg("moduleId", "kcross")                // 模块Id
-    arg("isMainModule", "true")              // 是否是主模块
-    arg("subModules", "moduleMine")       // 子模块，用&间隔
-    arg("enableMultiModule","true")          // 启用多模块
+    arg("moduleId", "moduleMine")        // 标识模块Id
+    arg("isMainModule", "false")      // 是否是主模块
+    arg("subModules", "libraryBase")       // 子模块，用&间隔
+    arg("enableMultiModule","true")   // 启用多模块
 }
 
 dependencies {
     compileOnly("com.tencent.kuikly-open:core-ksp:${Version.getKuiklyOhosVersion()}") {
         add("kspAndroid", this)
-        add("kspIosArm64", this)
-        add("kspIosX64", this)
-        add("kspIosSimulatorArm64", this)
         add("kspOhosArm64", this)
     }
 }
 
 android {
-    namespace = "com.susir.multimodule.shared"
+    namespace = "com.susir.mine.moduleMine"
     compileSdk = 34
     defaultConfig {
         minSdk = 21

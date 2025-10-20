@@ -31,3 +31,5 @@ include(":shared")
 project(":shared").buildFileName = buildFileName
 include(":libraryBase")
 project(":libraryBase").buildFileName = buildFileName
+include(":moduleMine")
+project(":moduleMine").buildFileName = buildFileName

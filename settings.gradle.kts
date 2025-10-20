@@ -19,3 +19,4 @@ rootProject.name = "kuiklyMultiModuleDemo"
 include(":androidApp")
 include(":shared")
 include(":libraryBase")
+include(":moduleMine")

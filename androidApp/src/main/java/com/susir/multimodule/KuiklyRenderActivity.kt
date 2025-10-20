@@ -44,7 +44,7 @@ class KuiklyRenderActivity : AppCompatActivity(), KuiklyRenderViewBaseDelegatorD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        PageInitializer.initializePages()
         setContentView(R.layout.activity_hr)
         setupImmersiveMode()
         hrContainerView = findViewById(R.id.hr_container)

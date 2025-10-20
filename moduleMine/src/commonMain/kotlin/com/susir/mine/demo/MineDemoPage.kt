@@ -1,25 +1,25 @@
-package com.susir.base.page
+package com.susir.mine.demo
 
 import com.susir.base.ext.srcPage
 import com.susir.base.service.getMessageService
+import com.tencent.kuikly.core.annotations.Page
 import com.tencent.kuikly.core.base.ViewBuilder
+import com.tencent.kuikly.core.module.RouterModule
 import com.tencent.kuikly.core.pager.Pager
 import com.tencent.kuikly.core.reactive.handler.observable
 import com.tencent.kuikly.core.views.Image
 import com.tencent.kuikly.core.views.Text
 import com.tencent.kuikly.core.views.View
-import com.tencent.kuikly.core.annotations.Page
-import com.tencent.kuikly.core.module.RouterModule
 
 /**
- *  libraryBase demo page
+ * moduleMine demo page
  *
  * @author suzhanfeng
- * @date 2025/10/20
+ * @date 2025/7/31
  */
-@Page(name = "BaseDemoPage", moduleId = "libraryBase")
-class BaseDemoPage : Pager() {
-    private var title by observable("Base")
+@Page(name = "MineDemoPage", moduleId = "moduleMine")
+class MineDemoPage : Pager() {
+    private var title by observable("Mine")
 
     override fun body(): ViewBuilder {
         val ctx = this
@@ -34,7 +34,7 @@ class BaseDemoPage : Pager() {
                 Image {
                     attr {
                         size(32f, 32f)
-                        srcPage("base_btn_back_ic.png")
+                        srcPage("mine_btn_back_ic.png")
                     }
                     event {
                         click {

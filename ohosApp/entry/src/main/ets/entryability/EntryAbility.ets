@@ -6,10 +6,24 @@ import window from '@ohos.window';
 import { KuiklyRenderAdapterManager } from '@kuikly-open/render';
 import { LogAdapter } from '../kuikly/adapter/LogAdapter';
 import { RouterAdapter } from '../kuikly/adapter/RouterAdapter';
+import { initializePages } from 'libentry.so';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    
+    try {
+      // 初始化多模块页面服务
+      hilog.info(0x0000, 'testTag', '%{public}s', 'Starting PageInitializer.initializePages()');
+      const result = initializePages();
+      if (result === 0) {
+        hilog.info(0x0000, 'testTag', '%{public}s', 'PageInitializer.initializePages() completed successfully');
+      } else {
+        hilog.error(0x0000, 'testTag', 'PageInitializer.initializePages() failed with code: %{public}d', result);
+      }
+    } catch (error) {
+      hilog.error(0x0000, 'testTag', 'Failed to initialize pages: %{public}s', JSON.stringify(error) ?? '');
+    }
   }
 
   onDestroy(): void {

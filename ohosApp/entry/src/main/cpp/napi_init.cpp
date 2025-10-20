@@ -10,11 +10,31 @@ static napi_value InitKuikly(napi_env env, napi_callback_info info) {
     return result;
 }
 
+static napi_value InitializePages(napi_env env, napi_callback_info info) {
+    try {
+        auto api = libshared_symbols();
+        // 获取PageInitializer实例并调用initializePages()
+        auto pageInitializer = api->kotlin.root.com.susir.multimodule.PageInitializer._instance();
+        api->kotlin.root.com.susir.multimodule.PageInitializer.initializePages(pageInitializer);
+        
+        // 返回成功状态
+        napi_value result;
+        napi_create_int32(env, 0, &result);
+        return result;
+    } catch (...) {
+        // 返回错误状态
+        napi_value result;
+        napi_create_int32(env, -1, &result);
+        return result;
+    }
+}
+
 EXTERN_C_START
 static napi_value Init(napi_env env, napi_value exports)
 {
     napi_property_descriptor desc[] = {
-        {"initKuikly", nullptr, InitKuikly, nullptr, nullptr, nullptr, napi_default, nullptr}
+        {"initKuikly", nullptr, InitKuikly, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"initializePages", nullptr, InitializePages, nullptr, nullptr, nullptr, napi_default, nullptr},
     };
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
     return exports;

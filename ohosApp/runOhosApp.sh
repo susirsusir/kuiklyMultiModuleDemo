@@ -3,7 +3,6 @@
 set -e
 
 echo "working path: $(pwd)"
-pushd ohosApp
 SDK_HOME=/Applications/DevEco-Studio.app/Contents
 export DEVECO_SDK_HOME=$SDK_HOME/sdk
 export PATH=$DEVECO_SDK_HOME:$SDK_HOME/jbr/Contents/Home/bin:$SDK_HOME/tools/node/bin:$SDK_HOME/tools/ohpm/bin:$SDK_HOME/tools/hvigor/bin:$PATH

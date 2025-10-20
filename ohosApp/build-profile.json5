@@ -8,6 +8,7 @@
         "signingConfig": "default",
         "compatibleSdkVersion": "5.0.0(12)",
         "runtimeOS": "HarmonyOS",
+        "arkTSVersion": "1.1"
       }
     ],
     "buildModeSet": [

@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 rootProject.name = "kuiklyMultiModuleDemo"
 include(":androidApp")
 include(":shared")
+include(":libraryBase")

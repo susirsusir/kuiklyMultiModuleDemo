@@ -37,24 +37,18 @@ kotlin {
         }
     }
 
-    ohosArm64 {
-        binaries.sharedLib {
-        }
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.tencent.kuikly-open:core:${Version.getKuiklyOhosVersion()}")
-                implementation("com.tencent.kuikly-open:core-annotations:${Version.getKuiklyOhosVersion()}")
-                implementation(project(":libraryBase"))
+                implementation("com.tencent.kuikly-open:core:${Version.getKuiklyVersion()}")
+                implementation("com.tencent.kuikly-open:core-annotations:${Version.getKuiklyVersion()}")
 
             }
         }
 
         val androidMain by getting {
             dependencies {
-                api("com.tencent.kuikly-open:core-render-android:${Version.getKuiklyOhosVersion()}")
+                api("com.tencent.kuikly-open:core-render-android:${Version.getKuiklyVersion()}")
             }
         }
 
@@ -71,8 +65,8 @@ kotlin {
     }
 }
 
-group = "com.susir.multimodule"
-version = System.getenv("kuiklyBizVersion") ?: "1.0.0"
+group = Version.PROJECT_GROUP
+version = Version.PROJECT_VERSION
 
 publishing {
     repositories {
@@ -88,24 +82,22 @@ publishing {
 
 ksp {
     arg(KEY_PAGE_NAME, getPageName())
-    arg("moduleId", "kcross")                // 模块Id
-    arg("isMainModule", "true")              // 是否是主模块
-    arg("subModules", "libraryBase")       // 子模块，用&间隔
-    arg("enableMultiModule","true")          // 启用多模块
+    arg("moduleId", "libraryBase")        // 标识模块Id
+    arg("isMainModule", "false")      // 是否是主模块
+    arg("enableMultiModule","true")   // 启用多模块
 }
 
 dependencies {
-    compileOnly("com.tencent.kuikly-open:core-ksp:${Version.getKuiklyOhosVersion()}") {
+    compileOnly("com.tencent.kuikly-open:core-ksp:${Version.getKuiklyVersion()}") {
         add("kspAndroid", this)
         add("kspIosArm64", this)
         add("kspIosX64", this)
         add("kspIosSimulatorArm64", this)
-        add("kspOhosArm64", this)
     }
 }
 
 android {
-    namespace = "com.susir.multimodule.shared"
+    namespace = "com.susir.librarybase.libraryBase"
     compileSdk = 34
     defaultConfig {
         minSdk = 21

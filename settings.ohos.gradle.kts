@@ -29,3 +29,5 @@ rootProject.buildFileName = buildFileName
 include(":androidApp")
 include(":shared")
 project(":shared").buildFileName = buildFileName
+include(":libraryBase")
+project(":libraryBase").buildFileName = buildFileName

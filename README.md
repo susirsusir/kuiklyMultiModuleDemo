@@ -4,6 +4,34 @@
 
 kuiklyMultiModuleDemo 是一个基于 Kuikly 框架的跨平台多模块架构演示项目，支持 Android、iOS 和 HarmonyOS 三大平台。项目采用 Kotlin Multiplatform 技术栈，实现了代码共享和平台特定的优化。
 
+### 核心特性
+
+- **模块化架构**：采用清晰的分层架构，包含基础库层、业务模块层、主模块层和应用层
+- **服务化设计**：通过服务接口实现模块间的松耦合通信，支持依赖注入和服务发现
+- **跨模块调用**：基于服务管理器实现安全、高效的跨模块接口调用，支持同步和异步调用模式
+- **页面路由管理**：统一的页面注册和路由机制，支持跨模块页面跳转和参数传递
+- **资源共享**：模块化的图片资源管理，支持通用资源和页面特定资源的灵活配置
+
+### 跨模块调用机制
+
+项目实现了完善的跨模块调用体系，主要包括：
+
+1. **服务接口定义**：各业务模块通过接口暴露服务能力，如 `MessageService`、`MineService`、`AccountService`
+2. **服务实现注册**：通过 `ModuleServiceManager` 统一管理服务实现的注册和发现
+3. **依赖注入支持**：使用 `ServiceExtensions` 提供便捷的服务获取方法
+4. **类型安全调用**：编译时检查服务接口，避免运行时错误
+5. **生命周期管理**：服务实例的创建、缓存和销毁由框架统一管理
+
+**调用示例：**
+```kotlin
+// 获取消息服务并调用
+val messageService = getService<MessageService>()
+messageService?.sendMessage("Hello from another module")
+
+// 跨模块页面跳转
+jumpToPage("MineDemoPage", mapOf("userId" to "123"))
+```
+
 ## 架构设计
 
 ### 1. 整体架构

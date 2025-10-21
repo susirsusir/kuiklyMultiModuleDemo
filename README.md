@@ -426,20 +426,92 @@ object PageInitializer {
 }
 ```
 
-### 9. 开发规范
+### 9. 图片资源管理
 
-#### 9.1 模块开发原则
+#### 9.1 资源目录结构
+
+项目采用模块化的图片资源管理方式，每个模块都有独立的 assets 目录：
+PS：Android天然支持不同模块的assets目录，每个模块的assets目录下可以有自己的图片资源。可以正常展示
+    iOS和ohos需要生成产物加入到原生项目工程中，才可以使用。即需要将不同模块素材合并到主模块（这里对应的shared模块）commonMain/assets目录下才会生效。
+    这里在业务模块的assets下多添加一个模块名的文件夹，来降低文件夹数量
+
+```
+模块名/src/commonMain/assets/
+└── 模块名/
+    ├── common/           # 模块通用图片资源
+    │   └── *.png
+    └── 页面名/           # 页面特定图片资源
+        └── *.png
+```
+
+**实际目录示例：**
+```
+libraryBase/src/commonMain/assets/
+└── libraryBase/
+    ├── common/
+    │   └── common_base_btn_back_ic.png
+    └── BaseDemoPage/
+        └── base_btn_back_ic.png
+
+moduleMine/src/commonMain/assets/
+└── moduleMine/
+    ├── common/
+    │   └── common_mine_btn_back_ic.png
+    └── MineDemoPage/
+        └── mine_btn_back_ic.png
+```
+
+#### 9.2 图片加载扩展方法
+
+项目在 `libraryBase` 模块中提供了便捷的图片加载扩展方法：
+
+**模块通用资源加载：**
+```kotlin
+// 自动识别当前模块
+ImageAttr.srcCommon("icon_name.png")
+
+// 指定模块名称
+ImageAttr.srcCommon("icon_name.png", "moduleMine")
+```
+
+**页面特定资源加载：**
+```kotlin
+// 自动识别当前模块和页面
+ImageAttr.srcPage("page_icon.png")
+
+// 指定模块和页面
+ImageAttr.srcPage("page_icon.png", "moduleMine", "MineDemoPage")
+```
+
+**背景图片设置：**
+```kotlin
+// 页面特定背景
+GroupAttr.backgroundPageImage("bg_image.png")
+
+// 模块通用背景
+GroupAttr.backgroundCommonImage("common_bg.png")
+```
+
+**头像加载（带默认图）：**
+```kotlin
+ImageAttr.srcAvatar("https://example.com/avatar.jpg")
+// 自动设置默认头像：assets://libraryBase/common/base_default_user_avatar.png
+```
+
+### 10. 开发规范
+
+#### 10.1 模块开发原则
 1. **单一职责**: 每个模块专注于特定的业务领域
 2. **依赖倒置**: 业务模块依赖基础模块，不直接依赖其他业务模块
 3. **接口隔离**: 通过接口定义模块间的通信协议
 4. **开闭原则**: 模块对扩展开放，对修改封闭
 
-#### 9.2 跨平台开发注意事项
+#### 10.2 跨平台开发注意事项
 1. **避免平台特定代码**: 在 commonMain 中不使用平台特定的 API
 3. **资源管理**: 将共享资源放在 commonMain/assets 目录
 4. **测试策略**: 为每个平台编写对应的测试用例
 
-### 10. 项目结构
+### 11. 项目结构
 
 ```
 kuiklyMultiModuleDemo/
@@ -459,15 +531,15 @@ kuiklyMultiModuleDemo/
 └── settings.ohos.gradle.kts    # HarmonyOS 项目设置
 ```
 
-### 11. 快速开始
+### 12. 快速开始
 
-#### 11.1 环境要求
+#### 12.1 环境要求
 - JDK 8+
 - Android Studio Arctic Fox+
 - Xcode 13+ (iOS 开发)
 - DevEco Studio (HarmonyOS 开发)
 
-#### 11.2 构建命令
+#### 12.2 构建命令
 ```bash
 # Android 构建
 ./gradlew :androidApp:assembleDebug
@@ -479,11 +551,9 @@ cd iosApp && xcodebuild
 ./gradlew -c settings.ohos.gradle.kts build
 ```
 
+### 13. 扩展指南
 
-
-### 12. 扩展指南
-
-#### 12.1 添加新业务模块
+#### 13.1 添加新业务模块
 1. 创建新模块目录
 2. 配置 build.gradle.kts 和 build.ohos.gradle.kts
 3. 在 settings 文件中注册模块

@@ -431,9 +431,9 @@ object PageInitializer {
 #### 9.1 资源目录结构
 
 项目采用模块化的图片资源管理方式，每个模块都有独立的 assets 目录：
-PS：Android天然支持不同模块的assets目录，每个模块的assets目录下可以有自己的图片资源。可以正常展示
-    iOS和ohos需要生成产物加入到原生项目工程中，才可以使用。即需要将不同模块素材合并到主模块（这里对应的shared模块）commonMain/assets目录下才会生效。
-    这里在业务模块的assets下多添加一个模块名的文件夹，来降低文件夹数量
+> Android天然支持不同模块的assets目录，每个模块的assets目录下可以有自己的图片资源，可以正常展示。  
+>iOS和ohos需要生成产物加入到原生项目工程中，才可以使用。即需要将不同模块素材合并到主模块（这里对应的shared模块）commonMain/assets目录下才会生效。  
+>这里在业务模块的assets下多添加一个模块名的文件夹，来降低文件夹数量
 
 ```
 模块名/src/commonMain/assets/
